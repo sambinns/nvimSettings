@@ -1,0 +1,18 @@
+[submodule "start/nvim-lspconfig"]
+	path = start/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
+[submodule "start/mason.nvim"]
+	path = start/mason.nvim
+	url = https://github.com/williamboman/mason.nvim
+[submodule "start/mason-lspconfig.nvim"]
+	path = start/mason-lspconfig.nvim
+	url = https://github.com/williamboman/mason-lspconfig.nvim
+[submodule "start/vim-cmake"]
+	path = start/vim-cmake
+	url = https://github.com/cdelledonne/vim-cmake
+[submodule "start/coq_nvim"]
+	path = start/coq_nvim
+	url = https://github.com/ms-jpq/coq_nvim
+[submodule "start/vim-fugitive"]
+	path = start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive

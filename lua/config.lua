@@ -1,6 +1,17 @@
 vim.g.have_nerd_font=true
+ 
+dockerBuildContainer='rocky-8-build'
+dockerUser='root'
+clangdCmd={'clangd'}
+if not ('Darwin' == vim.loop.os_uname().sysname) then
+    vim.g.cmake_command='docker_cmake'
+	vim.g.cmake_test_command='docker_ctest'
+    clangdCmd={'docker', 'exec', '--user', 'dockerUser', '-i', dockerBuildContainer, '/usr/bin/clangd', '--background-index', '2>/dev/null'}
+end
 
-require'lspconfig'.clangd.setup{}
+require'lspconfig'.clangd.setup{
+cmd = clangdCmd,
+}
 
 require'lspconfig'.lua_ls.setup {
   on_init = function(client)
@@ -35,3 +46,4 @@ require'lspconfig'.lua_ls.setup {
     Lua = {}
   }
 }
+

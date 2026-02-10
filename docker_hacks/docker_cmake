@@ -1,0 +1,6 @@
+#! /bin/sh
+
+dockerBuildContainer="${BUILD_CONTAINER:-rocky-8-build}"
+dockerUser="${BUILD_USER:-root}"
+
+docker exec --user "$dockerUser" --workdir "`pwd"` "$dockerBuildContainer" cmake "$@"

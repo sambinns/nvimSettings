@@ -16,3 +16,6 @@
 [submodule "start/vim-fugitive"]
 	path = start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
+[submodule "start/sleuth"]
+	path = start/sleuth
+	url = https://tpope.io/vim/sleuth.git

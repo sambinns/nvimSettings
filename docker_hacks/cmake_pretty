@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+
+CMAKE_EXE="${CMAKE_EXE:-cmake}"
+
+[ -f build.log ]		&& rm build.log
+[ -f pretty_build.log ] && rm pretty_build.log
+"${CMAKE_EXE}" "$@" | tee build.log | xcpretty --no-utf -r json-compilation-database --output compile_commands.json > pretty_build.log
+cat build.log

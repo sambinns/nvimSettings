@@ -19,3 +19,9 @@
 [submodule "start/sleuth"]
 	path = start/sleuth
 	url = https://tpope.io/vim/sleuth.git
+[submodule "start/marks.nvim"]
+	path = start/marks.nvim
+	url = https://github.com/chentoast/marks.nvim
+[submodule "start/lualine.nvim"]
+	path = start/lualine.nvim
+	url = https://github.com/nvim-lualine/lualine.nvim

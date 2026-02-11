@@ -1,17 +1,22 @@
 vim.g.have_nerd_font=true
- 
+vim.opt.number=true
+vim.opt.relativenumber=true
+vim.opt.signcolumn="number"
+
+vim.g.coq_settings = {
+	auto_start = 'shut-up',
+}
+require'coq'
+
 dockerBuildContainer='rocky-8-build'
 dockerUser='root'
-clangdCmd={'clangd'}
 if not ('Darwin' == vim.loop.os_uname().sysname) then
-    vim.g.cmake_command='docker_cmake'
-	vim.g.cmake_test_command='docker_ctest'
-    clangdCmd={'docker', 'exec', '--user', 'dockerUser', '-i', dockerBuildContainer, '/usr/bin/clangd', '--background-index', '2>/dev/null'}
+	require'lspconfig'.clangd.setup{
+		cmd={'docker', 'exec', '--user', 'dockerUser', '-i', dockerBuildContainer, '/usr/bin/clangd', '--background-index', '2>/dev/null'}
+	}
+else
+	require'lspconfig'.clangd.setup{}
 end
-
-require'lspconfig'.clangd.setup{
-cmd = clangdCmd,
-}
 
 require'lspconfig'.lua_ls.setup {
   on_init = function(client)
@@ -47,3 +52,34 @@ require'lspconfig'.lua_ls.setup {
   }
 }
 
+-- LSP keybingings
+vim.keymap.set("n", "gra", vim.lsp.buf.code_action)
+vim.keymap.set("n", "gri", vim.lsp.buf.implementation)
+vim.keymap.set("n", "grn", vim.lsp.buf.rename)
+vim.keymap.set("n", "grr", vim.lsp.buf.references)
+vim.keymap.set("n", "grt", vim.lsp.buf.type_definition)
+vim.keymap.set("n", "gO",  vim.lsp.buf.document_symbol)
+vim.keymap.set("i", "CTRL-S", vim.lsp.buf.signature_help)
+
+require'marks'.setup()
+-- Marks keymappings
+--     mx              Set mark x
+--	   m,              Set the next available alphabetical (lowercase) mark
+--     m;              Toggle the next available mark at the current line
+--     dmx             Delete mark x
+--     dm-             Delete all marks on the current line
+--     dm<space>       Delete all marks in the current buffer
+--     m]              Move to next mark
+--     m[              Move to previous mark
+--     m:              Preview mark. This will prompt you for a specific mark to
+--                     preview; press <cr> to preview the next mark.
+--                     
+--     m[0-9]          Add a bookmark from bookmark group[0-9].
+--     dm[0-9]         Delete all bookmarks from bookmark group[0-9].
+--     m}              Move to the next bookmark having the same type as the bookmark under
+--                     the cursor. Works across buffers.
+--     m{              Move to the previous bookmark having the same type as the bookmark under
+--                     the cursor. Works across buffers.
+--     dm=             Delete the bookmark under the cursor.
+
+require'lualine'.setup()

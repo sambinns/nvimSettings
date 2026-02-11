@@ -3,10 +3,12 @@ vim.opt.number=true
 vim.opt.relativenumber=true
 vim.opt.signcolumn="number"
 
-vim.g.coq_settings = {
-	auto_start = 'shut-up',
-}
-require'coq'
+if ('Darwin' == vim.loop.os_uname().sysname) then
+	vim.g.coq_settings = {
+		auto_start = 'shut-up',
+	}
+	require'coq'
+end
 
 dockerBuildContainer='rocky-8-build'
 dockerUser='root'

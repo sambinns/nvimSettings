@@ -25,3 +25,12 @@
 [submodule "start/lualine.nvim"]
 	path = start/lualine.nvim
 	url = https://github.com/nvim-lualine/lualine.nvim
+[submodule "start/telescope.nvim"]
+	path = start/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim.git
+[submodule "start/plenary.nvim"]
+	path = start/plenary.nvim
+	url = git@github.com:nvim-lua/plenary.nvim.git
+[submodule "start/telescope-fzf-native.nvim"]
+	path = start/telescope-fzf-native.nvim
+	url = git@github.com:nvim-telescope/telescope-fzf-native.nvim.git

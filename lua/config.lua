@@ -13,11 +13,16 @@ end
 dockerBuildContainer='rocky-8-build'
 dockerUser='root'
 if not ('Darwin' == vim.loop.os_uname().sysname) then
-	require'lspconfig'.clangd.setup{
-		cmd={'docker', 'exec', '--user', 'dockerUser', '-i', dockerBuildContainer, '/usr/bin/clangd', '--background-index', '2>/dev/null'}
-	}
+  require'lspconfig'.clangd.setup{
+    cmd={'docker', 'exec', '--user', 'dockerUser', '-i', dockerBuildContainer, '/usr/bin/clangd', '--background-index', '2>/dev/null'}
+  }
 else
-	require'lspconfig'.clangd.setup{}
+  require'lspconfig'.clangd.setup({})
+  require('lspconfig').sourcekit_lsp.setup({
+    -- Standard setup for sourcekit-lsp
+    -- It should automatically detect the buildServer.json
+  })
+
 end
 
 require'lspconfig'.lua_ls.setup {
@@ -59,7 +64,7 @@ vim.keymap.set("n", "gra", vim.lsp.buf.code_action)
 vim.keymap.set("n", "gri", vim.lsp.buf.implementation)
 vim.keymap.set("n", "grn", vim.lsp.buf.rename)
 vim.keymap.set("n", "grr", vim.lsp.buf.references)
-vim.keymap.set("n", "grt", vim.lsp.buf.type_definition)
+vim.keymap.set("n", "grt", vim.lsp.buf.definition)
 vim.keymap.set("n", "gO",  vim.lsp.buf.document_symbol)
 vim.keymap.set("i", "CTRL-S", vim.lsp.buf.signature_help)
 
@@ -85,3 +90,13 @@ require'marks'.setup()
 --     dm=             Delete the bookmark under the cursor.
 
 require'lualine'.setup()
+
+require('telescope').load_extension('fzf')
+
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+
+

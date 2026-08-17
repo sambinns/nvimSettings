@@ -34,3 +34,15 @@
 [submodule "start/telescope-fzf-native.nvim"]
 	path = start/telescope-fzf-native.nvim
 	url = git@github.com:nvim-telescope/telescope-fzf-native.nvim.git
+[submodule "start/nvim-dap"]
+	path = start/nvim-dap
+	url = https://github.com/mfussenegger/nvim-dap
+[submodule "start/nvim-nio"]
+	path = start/nvim-nio
+	url = https://github.com/nvim-neotest/nvim-nio
+[submodule "start/nvim-dap-ui"]
+	path = start/nvim-dap-ui
+	url = https://github.com/rcarriga/nvim-dap-ui
+[submodule "start/nvim-dap-python"]
+	path = start/nvim-dap-python
+	url = https://github.com/mfussenegger/nvim-dap-python

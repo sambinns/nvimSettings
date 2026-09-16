@@ -1,10 +1,12 @@
+local is_mac = vim.loop.os_uname().sysname == 'Darwin'
+
 vim.g.have_nerd_font=true
 vim.opt.number=true
 vim.opt.relativenumber=true
 vim.opt.signcolumn="number"
 vim.opt.exrc = true
 
-if ('Darwin' == vim.loop.os_uname().sysname) then
+if is_mac then
 	vim.g.coq_settings = {
 		auto_start = 'shut-up',
 	}
@@ -13,17 +15,13 @@ end
 
 dockerBuildContainer='rocky-8-build'
 dockerUser='root'
-if not ('Darwin' == vim.loop.os_uname().sysname) then
+if not is_mac then
   require'lspconfig'.clangd.setup{
     cmd={'docker', 'exec', '--user', 'dockerUser', '-i', dockerBuildContainer, '/usr/bin/clangd', '--background-index', '2>/dev/null'}
   }
 else
   require'lspconfig'.clangd.setup({})
-  require('lspconfig').sourcekit_lsp.setup({
-    -- Standard setup for sourcekit-lsp
-    -- It should automatically detect the buildServer.json
-  })
-
+  require('lspconfig').sourcekit_lsp.setup({})
 end
 
 require'lspconfig'.lua_ls.setup {
@@ -75,34 +73,34 @@ vim.keymap.set("i", "CTRL-S", vim.lsp.buf.signature_help)
 local dap = require('dap')
 local dapui = require('dapui')
 
--- C/C++ adapter: Apple lldb-dap (ships with Xcode)
-local lldb_dap_path = vim.fn.system('xcrun --find lldb-dap'):gsub('\n', '')
-dap.adapters.lldb = {
-  type = 'executable',
-  command = lldb_dap_path,
-  name = 'lldb',
-}
+if is_mac then
+  local lldb_dap_path = vim.fn.system('xcrun --find lldb-dap'):gsub('\n', '')
+  dap.adapters.lldb = {
+    type = 'executable',
+    command = lldb_dap_path,
+    name = 'lldb',
+  }
 
--- Default C/C++ launch config (prompts for executable)
-dap.configurations.cpp = {
-  {
-    name = 'Launch (select executable)',
-    type = 'lldb',
-    request = 'launch',
-    program = function()
-      return vim.fn.input('Executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopOnEntry = false,
-    args = function()
-      local input = vim.fn.input('Args (space-separated): ')
-      if input == '' then return {} end
-      return vim.split(input, ' ')
-    end,
-  },
-}
-dap.configurations.c = dap.configurations.cpp
-dap.configurations.objcpp = dap.configurations.cpp
+  dap.configurations.cpp = {
+    {
+      name = 'Launch (select executable)',
+      type = 'lldb',
+      request = 'launch',
+      program = function()
+        return vim.fn.input('Executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      stopOnEntry = false,
+      args = function()
+        local input = vim.fn.input('Args (space-separated): ')
+        if input == '' then return {} end
+        return vim.split(input, ' ')
+      end,
+    },
+  }
+  dap.configurations.c = dap.configurations.cpp
+  dap.configurations.objcpp = dap.configurations.cpp
+end
 
 -- Python adapter via debugpy
 require('dap-python').setup('python3')
@@ -127,8 +125,9 @@ vim.keymap.set('n', '<Leader>dl', dap.run_last, { desc = 'Re-run last debug' })
 vim.keymap.set('n', '<Leader>du', dapui.toggle, { desc = 'Toggle DAP UI' })
 
 -- AI tools (new tab)
-vim.keymap.set('n', '<Leader>cc', function() vim.cmd('tabnew | terminal claude') end, { desc = 'Claude Code (new tab)' })
-vim.keymap.set('n', '<Leader>oc', function() vim.cmd('tabnew | terminal opencode') end, { desc = 'opencode (new tab)' })
+vim.keymap.set('n', '<Leader>cc', function() vim.cmd('tabnew | terminal claude -c') end, { desc = 'Claude Code continue (new tab)' })
+vim.keymap.set('n', '<Leader>oc', function() vim.cmd('tabnew | terminal opencode -c') end, { desc = 'opencode continue (new tab)' })
+vim.keymap.set('n', '<Leader>oC', function() vim.cmd('tabnew | terminal opencode') end, { desc = 'opencode (new tab)' })
 
 require'marks'.setup()
 -- Marks keymappings
